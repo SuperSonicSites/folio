@@ -1,0 +1,481 @@
+---
+// Main Brief Studio Page
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folio — Client Brief Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Founders+Grotesk:wght@400;500;600&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --light-bg: #fafaf9;
+            --light-bg-secondary: #ffffff;
+            --light-text: #1c1c1c;
+            --light-text-secondary: #666666;
+            --light-border: #e8e8e8;
+            --light-accent: #0066cc;
+            
+            --dark-bg: #0f0f0f;
+            --dark-bg-secondary: #1a1a1a;
+            --dark-text: #f5f5f5;
+            --dark-text-secondary: #999999;
+            --dark-border: #2a2a2a;
+            --dark-accent: #66b3ff;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            gap: 0;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: var(--light-bg-secondary);
+            border-right: 1px solid var(--light-border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.dark-mode .sidebar {
+            background-color: var(--dark-bg-secondary);
+            border-right-color: var(--dark-border);
+        }
+
+        .sidebar-header {
+            padding: 32px 24px 24px;
+            border-bottom: 1px solid var(--light-border);
+            transition: border-color 0.3s ease;
+        }
+
+        body.dark-mode .sidebar-header {
+            border-bottom-color: var(--dark-border);
+        }
+
+        .sidebar-header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--light-text-secondary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .mode-toggle {
+            color: var(--dark-text-secondary);
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background-color: var(--light-border);
+            border-radius: 12px;
+            position: relative;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        body.dark-mode .toggle-switch {
+            background-color: var(--dark-accent);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 10px;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s ease;
+        }
+
+        body.dark-mode .toggle-switch::after {
+            left: 22px;
+        }
+
+        .clients-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .client-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background-color: var(--light-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+        }
+
+        body.dark-mode .client-item {
+            background-color: var(--dark-bg);
+        }
+
+        .client-item:hover {
+            background-color: var(--light-border);
+        }
+
+        body.dark-mode .client-item:hover {
+            background-color: var(--dark-border);
+        }
+
+        .client-item.active {
+            background-color: var(--light-accent);
+            color: white;
+            border-left-color: var(--light-accent);
+        }
+
+        body.dark-mode .client-item.active {
+            background-color: var(--dark-accent);
+            border-left-color: var(--dark-accent);
+        }
+
+        .sidebar-footer {
+            padding: 16px 12px;
+            border-top: 1px solid var(--light-border);
+            transition: border-color 0.3s ease;
+        }
+
+        body.dark-mode .sidebar-footer {
+            border-top-color: var(--dark-border);
+        }
+
+        .btn-new-client {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--light-accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            font-family: 'Founders Grotesk', sans-serif;
+        }
+
+        .btn-new-client:hover {
+            opacity: 0.9;
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--light-bg);
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .editor-container {
+            background-color: var(--dark-bg);
+        }
+
+        .editor-header {
+            padding: 32px 40px 24px;
+            border-bottom: 1px solid var(--light-border);
+            transition: border-color 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        body.dark-mode .editor-header {
+            border-bottom-color: var(--dark-border);
+        }
+
+        .editor-header h2 {
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+        }
+
+        .editor-header p {
+            font-size: 13px;
+            color: var(--light-text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .editor-header p {
+            color: var(--dark-text-secondary);
+        }
+
+        .btn-save {
+            padding: 10px 20px;
+            background-color: var(--light-accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Founders Grotesk', sans-serif;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+        }
+
+        .btn-save:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .editor {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .editor-input {
+            flex: 1;
+            padding: 40px;
+            background-color: var(--light-bg);
+            border: none;
+            font-family: 'Crimson Text', serif;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--light-text);
+            resize: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode .editor-input {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .editor-input::placeholder {
+            color: var(--light-text-secondary);
+        }
+
+        body.dark-mode .editor-input::placeholder {
+            color: var(--dark-text-secondary);
+        }
+
+        .editor-input:focus {
+            outline: none;
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text-secondary);
+            font-size: 14px;
+        }
+
+        body.dark-mode .empty-state {
+            color: var(--dark-text-secondary);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--light-border);
+            border-radius: 4px;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-thumb {
+            background: var(--dark-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Folio</h1>
+                <div class="mode-toggle" onclick="toggleMode()">
+                    <span>Dark</span>
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+
+            <div class="clients-list" id="clientsList">
+                <div class="empty-state">Loading clients...</div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="btn-new-client" onclick="newClient()">+ New Client</button>
+            </div>
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-header">
+                <div>
+                    <h2 id="clientName">Select a client</h2>
+                    <p id="clientDate"></p>
+                </div>
+                <button class="btn-save" id="saveBtn" onclick="saveBrief()" disabled>Save Brief</button>
+            </div>
+
+            <div class="editor">
+                <textarea class="editor-input" id="briefEditor" placeholder="Select a client to start editing..." disabled></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const body = document.body;
+        const clientsList = document.getElementById('clientsList');
+        const briefEditor = document.getElementById('briefEditor');
+        const clientName = document.getElementById('clientName');
+        const clientDate = document.getElementById('clientDate');
+        const saveBtn = document.getElementById('saveBtn');
+
+        let currentClient = null;
+        let isDirty = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'true') {
+                toggleMode();
+            }
+            loadClients();
+        });
+
+        function toggleMode() {
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+        }
+
+        async function loadClients() {
+            try {
+                const res = await fetch('/api/clients');
+                const data = await res.json();
+                
+                clientsList.innerHTML = '';
+                data.clients.forEach(client => {
+                    const item = document.createElement('div');
+                    item.className = 'client-item';
+                    item.textContent = client;
+                    item.onclick = () => loadBrief(client);
+                    clientsList.appendChild(item);
+                });
+            } catch (error) {
+                clientsList.innerHTML = '<div class="empty-state">Error loading clients</div>';
+            }
+        }
+
+        async function loadBrief(client) {
+            try {
+                const res = await fetch(`/api/load?client=${encodeURIComponent(client)}`);
+                const data = await res.json();
+                
+                currentClient = client;
+                briefEditor.value = data.content || '';
+                briefEditor.disabled = false;
+                clientName.textContent = client;
+                clientDate.textContent = `Last edited ${new Date(data.lastEdited).toLocaleString()}`;
+                
+                document.querySelectorAll('.client-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                
+                isDirty = false;
+                updateSaveBtn();
+            } catch (error) {
+                alert('Error loading brief');
+            }
+        }
+
+        async function saveBrief() {
+            if (!currentClient) return;
+            
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+            
+            try {
+                const res = await fetch('/api/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client: currentClient,
+                        content: briefEditor.value
+                    })
+                });
+
+                if (res.ok) {
+                    isDirty = false;
+                    updateSaveBtn();
+                    alert('Brief saved!');
+                    clientDate.textContent = `Last edited just now`;
+                } else {
+                    alert('Error saving brief');
+                }
+            } catch (error) {
+                alert('Error saving brief: ' + error.message);
+            } finally {
+                saveBtn.disabled = !isDirty;
+                saveBtn.textContent = 'Save Brief';
+            }
+        }
+
+        function updateSaveBtn() {
+            saveBtn.disabled = !isDirty;
+        }
+
+        briefEditor.addEventListener('input', () => {
+            isDirty = true;
+            updateSaveBtn();
+        });
+
+        function newClient() {
+            const name = prompt('Enter client name:');
+            if (name) {
+                currentClient = name;
+                briefEditor.value = `# ${name}\n\n## About the Client\n\n- **Name:** \n- **Business Name:** \n\n## Services\n\n- `;
+                briefEditor.disabled = false;
+                clientName.textContent = name;
+                isDirty = true;
+                updateSaveBtn();
+            }
+        }
+    </script>
+</body>
+</html>
